@@ -1,0 +1,221 @@
+<h1 id="cli-for-importing-and-exporting-apis-and-applications">CLI for Importing and Exporting APIs and Applications</h1>
+<h2 id="for-wso2-api-manager-2-2.0">For WSO2 API Manager 2.6.0</h2>
+<p>Command Line tool for importing and exporting APIs and Applications between different API Environments</p>
+<h2 id="getting-started">Getting Started</h2>
+<ul>
+    <li><h3 id="running">Running</h3>
+        <p> Select a generated archive suitable for your platform (Mac, Windows, Linux) and extract it to a desired
+            location and <code>cd</code> into it.<br> Then execute <code>apimcli</code> to start the application.</p>
+        <blockquote>
+            <p>NOTE: Execute <code>./apimcli</code> if the working directory is the same where the executable resides
+            </p>
+            <p>Add the location of extracted folder to your system&#39;s $PATH variable to access the executable from
+                anywhere </p>
+        </blockquote>
+        <p> Execute <code>apimcli --help</code> for further instructions.</p>
+    </li>
+    <li><h3 id="adding-environments">Adding Environments</h3>
+        <p> Add environments by either manually editing <code>$HOME/.wso2apimcli/main_config.yaml</code> or using the
+            command<br> <code>apimcli add-env</code>.</p>
+        <blockquote>
+            <p>NOTE: Directory structure for configuration files (<code>$HOME/.wso2apimcli</code>) will be created upon
+                execution of <code>apimcli</code></p>
+        </blockquote>
+        <p> Execute <code>apimcli add-env --help</code> for detailed instructions</p>
+        <blockquote>
+            <p>Under environment, <code>api_manager_endpoint</code>, <code>registration_endpoint</code>, <code>token_endpoint</code>
+                fields are mandatory. Others are optional</p>
+        </blockquote>
+    </li>
+    <li><h3 id="command-autocompletion-for-bash-only-">Command Autocompletion (For Bash Only)</h3>
+        <p> Copy the file <code>apimcli_bash_completion.sh</code> to <code>/etc/bash_completion.d/</code> and source it
+            with<br> <code>source /etc/bash_completion.d/apimcli_bash_completion.sh</code> to enable bash
+            auto-completion.</p>
+    </li>
+</ul>
+<hr>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-bash">     apimcli [command]
+</code></pre>
+<h4 id="global-flags">Global Flags</h4>
+<pre><code class="lang-bash">      --verbose
+           Enable verbose logs (Provides more information on execution)
+      --insecure, -k
+          Allow connections to SSL sites without certs
+      --help, -h
+          Display information and example usage of a command
+</code></pre>
+<h3 id="commands">Commands</h3>
+<ul>
+    <li><h4 id="export-api">export-api</h4>
+        <pre><code class="lang-bash">   Flags:
+       Required:
+           --name, -n
+           --version, -v
+           --provider, -r
+           --environment, -e
+       Optional:
+           --username, -u
+           --password, -p
+           NOTE: user will be prompted to enter credentials if they are not provided with these flags
+   Examples:
+       apimcli export-api -n TestAPI -v 1.0.1 -r admin -e staging
+       apimcli export-api -n TestAPI -v 1.0.1 -r admin -e staging -u admin -p 123456
+       apimcli export-api -n TestAPI -v 1.0.1 -r admin -e staging -u admin
+       apimcli export-api -n TestAPI -v 1.0.1 -r admin -e staging -p 123456
+</code></pre>
+    </li>
+</ul>
+<ul>
+    <li><h4 id="import-api">import-api</h4>
+    </li>
+</ul>
+<pre><code class="lang-bash">        Flags:
+            Required:
+                --file, -f
+                --environment, -e
+            Optional:
+                --username, -u 
+                --password, -p 
+                NOTE: user will be prompted to enter credentials if they are not provided with these flags
+        Examples:
+            apimcli import-api -f dev/TestAPI_1.0.0.zip -e dev
+            apimcli import-api -f qa/TestAPI_2.0.0.zip -e dev -u admin -p 123456
+            apimcli import-api -f staging/TestAPI_1.1.zip -e dev -u admin
+            apimcli import-api -f production/TestAPI_3.0.1.zip -e dev -p 123456 
+            apimcli import-api -f TestAPI -e dev
+</code></pre>
+<ul>
+    <li><h4 id="export-app">export-app</h4>
+        <pre><code class="lang-bash">   Flags:
+       Required:
+            --name, -n
+            --owner, -o
+            --environment, -e
+       Optional:
+            --username, -u
+            --password, -p
+            NOTE: user will be prompted to enter credentials if they are not provided with these flags
+   Examples:
+            apimcli export-app -n SampleApp -o admin -e dev
+            apimcli export-app -n SampleApp -o admin -e prod
+</code></pre>
+    </li>
+</ul>
+<ul>
+    <li><h4 id="import-app">import-app</h4>
+    </li>
+</ul>
+<pre><code class="lang-bash">        Flags:
+            Required
+                  --file, -f
+                  --environment, -e
+            Optional
+                  --skipSubscriptions, -s
+                  --owner, -o
+                  --preserveOwner, -r
+                  --file, -f
+                  --environment, -e
+        Examples:
+            apimcli import-app -f qa/apps/sampleApp.zip -e dev
+            apimcli Import App -f staging/apps/sampleApp.zip -e prod -o testUser -u admin -p admin
+            apimcli import-app -f qa/apps/sampleApp.zip --preserveOwner --skipSubscriptions -e staging
+</code></pre>
+<ul>
+    <li><h4 id="list-apis">list apis</h4>
+        <pre><code class="lang-bash">      Flags:
+          Required:
+              --environment, -e
+          Optional:
+              --username, -u 
+              --password, -p 
+              NOTE: user will be prompted to enter credentials if they are not provided with these flags
+              --query, -q
+      Examples:
+          apimcli list apis -e dev
+          apimcli list apis -e prod -q version:1.0.0 
+          apimcli list apis -e prod -q provider:admin 
+          apimcli list apis -e staging 
+          apimcli list apis -e staging -u admin -p 123456
+          apimcli list apis -e staging -p 123456
+</code></pre>
+    </li>
+    <li><h4 id="list-apps">list apps</h4>
+        <pre><code class="lang-bash">      Flags:
+          Required
+                  --environment, -e
+                  --owner, -o
+            Optional
+                  --username, -u
+                  --password, -p
+        Examples:
+            apimcli list apps -e dev -o admin
+            apimcli list apps -e staging -o sampleUser -u admin -p 123456
+</code></pre>
+    </li>
+    <li><h4 id="list-envs">list envs</h4>
+        <pre><code class="lang-bash">     Flags:
+         None
+     Example:
+         apimcli list envs
+</code></pre>
+    </li>
+    <li><h4 id="add-env">add-env</h4>
+        <pre><code class="lang-bash">      Flags:
+        Required:
+            --name, -n (Name of the environment)
+            --apim (API Manager endpoint)
+            --registration (Registration Endpoint)
+            --token (Token Endpoint)
+        Optional:
+            --import-export (API Import Export Endpoint for environment)
+            --list (API List endpoint for environment)
+
+        Examples:
+        apimcli add-env -n dev \
+            --apim https://localhost:9443 \ 
+            --registration https://localhost:9443/client-registration/v0.14/register \
+            --token https://localhost:9443/oauth2/token
+            
+        apimcli add-env -n prod \
+            --apim https://localhost:9443 \ 
+            --registration https://localhost:9443/client-registration/v0.14/register \
+            --import-export https://localhost:9443/api-import-export-2.6.0-v0 \
+            --api_list https://localhost:9443/api/am/publisher/v0.14/apis \
+            --app_list https://localhost:9443/api/am/admin/v0.14/applications \
+            --token https://localhost:9443/oauth2/token
+</code></pre>
+    </li>
+    <li><h4 id="remove-env">remove-env</h4>
+    </li>
+</ul>
+<pre><code class="lang-bash">        Flags:
+            Required:
+                --name, -n (Name of the environment)
+            Examples:
+                apimcli remove-env -n dev
+</code></pre>
+<ul>
+    <li><h4 id="reset-user">reset-user</h4>
+    </li>
+</ul>
+<pre><code class="lang-bash">        Flags
+            --environment, -e
+        Examples:
+            apimcli reset-user -e dev
+</code></pre>
+<ul>
+    <li><h4 id="version">version</h4>
+        <pre><code class="lang-bash">      apimcli version
+</code></pre>
+    </li>
+    <li><h4 id="set">set</h4>
+        <pre><code class="lang-bash">      Flags
+          --http-request-timeout
+          --export-directory
+      Examples:
+          apimcli set --http-request-timeout 10000
+          apimcli set --export-directory /home/user/exported
+</code></pre>
+    </li>
+</ul>
